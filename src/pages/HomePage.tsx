@@ -1,4 +1,3 @@
-// src/pages/HomePage.tsx
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
@@ -11,45 +10,51 @@ import {
   Award,
   Menu,
 } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
-           <nav className="sticky top-0 z-50 h-16 bg-white border-b border-gray-200 backdrop-blur-sm bg-white/90">
-        <div className="container mx-auto h-full lg:px-8 flex items-center justify-between">
-          <div className="font-semibold text-base md:text-lg text-indigo-900 transition-all">
-            Career Guidance System
-          </div>
-          <div className="hidden md:flex items-center gap-6 lg:gap-8">
-            <a
-              href="#home"
-              className="text-sm lg:text-base text-gray-700 hover:text-indigo-600 transition-all duration-300 hover:underline underline-offset-4"
-            >
-              Home
-            </a>
-            <a
-              href="#about"
-              className="text-sm lg:text-base text-gray-700 hover:text-indigo-600 transition-all duration-300 hover:underline underline-offset-4"
-            >
-              About
-            </a>
-            <a
-              href="#try"
-              className="text-sm lg:text-base text-gray-700 hover:text-indigo-600 transition-all duration-300 hover:underline underline-offset-4"
-            >
-              Try System
-            </a>
-          </div>
-          <button className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <Menu className="w-6 h-6 text-gray-700" />
-          </button>
+      <nav className="sticky top-0 z-50 h-16 border-b border-gray-200 backdrop-blur bg-white/90">
+  <div className="container mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+    <div className="font-semibold text-base md:text-lg text-indigo-900">
+      Career Guidance System
+    </div>
+
+    {/* Desktop Nav */}
+    <div className="hidden md:flex items-center gap-6 lg:gap-8">
+      <a href="#home" className="nav-link">Home</a>
+      <a href="#about" className="nav-link">About</a>
+      <a href="#try" className="nav-link">Try System</a>
+    </div>
+
+    {/* Mobile Nav */}
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu className="h-6 w-6" />
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent side="right" className="w-72 px-4">
+        <div className="flex flex-col gap-6 mt-10">
+          <a href="#home" className="mobile-link">Home</a>
+          <a href="#about" className="mobile-link">About</a>
+          <a href="#try" className="mobile-link">Try System</a>
+
+          <Button className="mt-4 bg-indigo-600 hover:bg-indigo-700">
+            Try Career Guidance
+          </Button>
         </div>
-      </nav>
+      </SheetContent>
+    </Sheet>
+  </div>
+</nav>
 
            {/* Hero Section */}
                  <section id="home" className="bg-gradient-to-br from-blue-50 via-indigo-50 to-white py-12 md:py-16 lg:py-20">
-        <div className="container mx-auto lg:px-8">
+        <div className="container mx-auto px-4 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="space-y-4 md:space-y-6 animate-fade-in">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-balance leading-tight">
@@ -80,7 +85,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex justify-center animate-slide-up">
-              <Card className="p-4 md:p-6 space-y-4 bg-white shadow-lg rounded-xl max-w-md w-full transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+              <Card className="p-4 md:p-6 space-y-4 bg-white shadow-lg rounded-xl max-w-sm sm:max-w-md w-full transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 p-3 bg-indigo-50 rounded-lg transition-all duration-300 hover:bg-indigo-100 hover:scale-105">
                     <Award className="w-6 h-6 md:w-8 md:h-8 text-indigo-600" />
@@ -112,7 +117,7 @@ export default function HomePage() {
 
       {/* Background to the Study */}
        <section id="about" className="py-12 md:py-16 lg:py-20 bg-white">
-        <div className="container mx-auto lg:px-8">
+        <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
             Background to the Study
           </h2>
@@ -165,7 +170,7 @@ export default function HomePage() {
       
       {/* Problem Statement */}
       <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
-        <div className="container mx-auto lg:px-8">
+        <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">Problem Statement</h2>
           <Card className="max-w-3xl mx-auto p-6 md:p-8 bg-gray-100 border-l-4 border-indigo-600 shadow-sm transition-all duration-300 hover:shadow-lg">
             <p className="text-base md:text-lg text-center text-gray-700 mb-6 md:mb-8 italic leading-relaxed">
@@ -198,7 +203,7 @@ export default function HomePage() {
 
             {/* Aim & Objectives */}
       <section className="py-12 md:py-16 lg:py-20 bg-white">
-        <div className="container mx-auto lg:px-8">
+        <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">Aim & Objectives</h2>
           <div className="max-w-4xl mx-auto space-y-6">
             <Card className="p-6 md:p-8 bg-indigo-50 shadow-sm rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
@@ -240,7 +245,7 @@ export default function HomePage() {
 
       {/* Justification / Significance */}
       <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
-        <div className="container mx-auto lg:px-8">
+        <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
             Justification & Significance
           </h2>
@@ -271,7 +276,7 @@ export default function HomePage() {
 
       {/* Methodology */}
       <section className="py-12 md:py-16 lg:py-20 bg-white">
-        <div className="container mx-auto lg:px-8">
+        <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">Methodology</h2>
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
@@ -321,7 +326,7 @@ export default function HomePage() {
 
             {/* Expected Result & Contribution */}
       <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
-        <div className="container mx-auto lg:px-8">
+        <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
             Expected Result & Contribution
           </h2>
@@ -364,7 +369,7 @@ export default function HomePage() {
 
            {/* Call to Action */}
       <section id="try" className="py-12 md:py-16 lg:py-20 bg-gradient-to-br from-indigo-600 to-indigo-800 text-white">
-        <div className="container mx-auto lg:px-8 text-center">
+        <div className="container mx-auto px-4 lg:px-8 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 text-balance">
             Discover a career path that matches your strengths.
           </h2>
@@ -382,7 +387,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-8 md:py-12">
-        <div className="container mx-auto lg:px-8 text-center space-y-2">
+        <div className="container mx-auto px-4 lg:px-8 text-center space-y-2">
           <div className="text-base md:text-lg font-semibold text-white">Career Guidance System</div>
           <div className="text-xs md:text-sm">Ilerioluwa Banjo</div>
           <div className="text-xs md:text-sm">Department of Computer Science</div>
