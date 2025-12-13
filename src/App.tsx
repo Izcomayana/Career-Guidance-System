@@ -1,12 +1,9 @@
 // src/App.tsx
-import type { ReactNode } from "react"
 import HomePage from "./pages/HomePage"
+import { Route, Routes } from "react-router-dom"
+import AboutPage from "./pages/about"
 
-type AppProps = {
-  children?: ReactNode
-}
-
-export default function App({ children }: AppProps) {
+export default function App() {
   return (
     <div
       className="font-sans"
@@ -14,7 +11,10 @@ export default function App({ children }: AppProps) {
         fontFamily: "Inter, Poppins, system-ui, sans-serif",
       }}
     >
-      {children ?? <HomePage />}
+          <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<AboutPage />} />
+    </Routes>
     </div>
   )
 }

@@ -11,49 +11,50 @@ import {
   Menu,
 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Link } from "react-router-dom"
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
       <nav className="sticky top-0 z-50 h-16 border-b border-gray-200 backdrop-blur bg-white/90">
-  <div className="container mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-    <div className="font-semibold text-base md:text-lg text-indigo-900">
-      Career Guidance System
-    </div>
+        <div className="container mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          <div className="font-semibold text-base md:text-lg text-indigo-900">
+            Career Guidance System
+          </div>
 
-    {/* Desktop Nav */}
-    <div className="hidden md:flex items-center gap-6 lg:gap-8">
-      <a href="#home" className="nav-link">Home</a>
-      <a href="#about" className="nav-link">About</a>
-      <a href="#try" className="nav-link">Try System</a>
-    </div>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/about" className="nav-link">About</Link>
+            <Link to="/try" className="nav-link">Try System</Link>
+          </div>
 
-    {/* Mobile Nav */}
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-6 w-6" />
-        </Button>
-      </SheetTrigger>
+          {/* Mobile Nav */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
 
-      <SheetContent side="right" className="w-72 px-4">
-        <div className="flex flex-col gap-6 mt-10">
-          <a href="#home" className="mobile-link">Home</a>
-          <a href="#about" className="mobile-link">About</a>
-          <a href="#try" className="mobile-link">Try System</a>
+            <SheetContent side="right" className="w-72 px-4">
+              <div className="flex flex-col gap-6 mt-10">
+                <Link to="/" className="mobile-link">Home</Link>
+                <Link to="/about" className="mobile-link">About</Link>
+                <Link to="/try" className="mobile-link">Try System</Link>
 
-          <Button className="mt-4 bg-indigo-600 hover:bg-indigo-700">
-            Try Career Guidance
-          </Button>
+                <Button className="mt-4 bg-indigo-600 hover:bg-indigo-700">
+                  Try Career Guidance
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
-      </SheetContent>
-    </Sheet>
-  </div>
-</nav>
+      </nav>
 
-           {/* Hero Section */}
-                 <section id="home" className="bg-gradient-to-br from-blue-50 via-indigo-50 to-white py-12 md:py-16 lg:py-20">
+      {/* Hero Section */}
+      <section id="home" className="bg-gradient-to-br from-blue-50 via-indigo-50 to-white py-12 md:py-16 lg:py-20">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="space-y-4 md:space-y-6 animate-fade-in">
@@ -116,7 +117,7 @@ export default function HomePage() {
       </section>
 
       {/* Background to the Study */}
-       <section id="about" className="py-12 md:py-16 lg:py-20 bg-white">
+      <section id="about" className="py-12 md:py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
             Background to the Study
@@ -167,7 +168,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      
+
       {/* Problem Statement */}
       <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
         <div className="container mx-auto px-4 lg:px-8">
@@ -201,7 +202,7 @@ export default function HomePage() {
         </div>
       </section>
 
-            {/* Aim & Objectives */}
+      {/* Aim & Objectives */}
       <section className="py-12 md:py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">Aim & Objectives</h2>
@@ -324,7 +325,7 @@ export default function HomePage() {
         </div>
       </section>
 
-            {/* Expected Result & Contribution */}
+      {/* Expected Result & Contribution */}
       <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
         <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
@@ -367,7 +368,7 @@ export default function HomePage() {
         </div>
       </section>
 
-           {/* Call to Action */}
+      {/* Call to Action */}
       <section id="try" className="py-12 md:py-16 lg:py-20 bg-gradient-to-br from-indigo-600 to-indigo-800 text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 text-balance">
