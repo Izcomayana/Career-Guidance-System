@@ -1,48 +1,89 @@
 export default function () {
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-white">
-      <div className="container mx-auto px-4 lg:px-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">Methodology</h2>
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
-            <div className="text-center">
-              <div className="w-14 h-14 md:w-16 md:h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 font-bold text-lg md:text-xl relative transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                1<div className="hidden md:block absolute left-full top-1/2 w-full h-0.5 bg-indigo-200 -z-10"></div>
-              </div>
-              <h3 className="font-semibold text-xs md:text-base text-gray-900 mb-1 md:mb-2">Data Collection</h3>
-              <p className="text-xs md:text-sm text-gray-600">Gather academic records</p>
+    <section className="py-12 sm:py-16 lg:py-20">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-indigo-900 mb-8 sm:mb-12 text-center">
+          Methodology
+        </h2>
+
+        {/* Steps */}
+        <div className="space-y-6 sm:space-y-8 mb-8 sm:mb-12">
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+            <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg sm:text-xl shadow-lg">
+              1
             </div>
-            <div className="text-center">
-              <div className="w-14 h-14 md:w-16 md:h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 font-bold text-lg md:text-xl relative transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                2<div className="hidden md:block absolute left-full top-1/2 w-full h-0.5 bg-indigo-200 -z-10"></div>
-              </div>
-              <h3 className="font-semibold text-xs md:text-base text-gray-900 mb-1 md:mb-2">Skill Assessment</h3>
-              <p className="text-xs md:text-sm text-gray-600">Evaluate capabilities</p>
-            </div>
-            <div className="text-center">
-              <div className="w-14 h-14 md:w-16 md:h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 font-bold text-lg md:text-xl relative transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                3<div className="hidden md:block absolute left-full top-1/2 w-full h-0.5 bg-indigo-200 -z-10"></div>
-              </div>
-              <h3 className="font-semibold text-xs md:text-base text-gray-900 mb-1 md:mb-2">Career Analysis</h3>
-              <p className="text-xs md:text-sm text-gray-600">Match profiles</p>
-            </div>
-            <div className="text-center">
-              <div className="w-14 h-14 md:w-16 md:h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 font-bold text-lg md:text-xl transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                4
-              </div>
-              <h3 className="font-semibold text-xs md:text-base text-gray-900 mb-1 md:mb-2">Recommendation</h3>
-              <p className="text-xs md:text-sm text-gray-600">Provide guidance</p>
+            <div className="flex-1 bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+              <h3 className="text-lg sm:text-xl font-bold text-indigo-900 mb-2 sm:mb-3">Data Collection</h3>
+              <ul className="space-y-2 text-sm sm:text-base text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-600 mt-1">•</span>
+                  <span>Academic records (GPA, course grades, major)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-600 mt-1">•</span>
+                  <span>Skill assessment survey (technical, soft skills, interests)</span>
+                </li>
+              </ul>
             </div>
           </div>
-          <div className="flex justify-center gap-2 md:gap-3 flex-wrap">
-            <span className="px-3 md:px-4 py-1.5 md:py-2 bg-gray-100 rounded-full text-xs md:text-sm text-gray-700 border border-gray-200 transition-all duration-300 hover:bg-gray-200 hover:scale-105">
-              PHP
+
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+            <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg sm:text-xl shadow-lg">
+              2
+            </div>
+            <div className="flex-1 bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+              <h3 className="text-lg sm:text-xl font-bold text-indigo-900 mb-2 sm:mb-3">Data Processing</h3>
+              <ul className="space-y-2 text-sm sm:text-base text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-600 mt-1">•</span>
+                  <span>Weighted scoring based on academic and skill metrics</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-600 mt-1">•</span>
+                  <span>Rule-based logic to match profiles with career paths</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+            <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg sm:text-xl shadow-lg">
+              3
+            </div>
+            <div className="flex-1 bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+              <h3 className="text-lg sm:text-xl font-bold text-indigo-900 mb-2 sm:mb-3">Career Recommendation</h3>
+              <ul className="space-y-2 text-sm sm:text-base text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-600 mt-1">•</span>
+                  <span>Generate personalized career recommendations</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-600 mt-1">•</span>
+                  <span>Display best-fit career output with confidence scores</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Technology Stack */}
+        <div className="bg-indigo-50 p-6 sm:p-8 rounded-lg border-2 border-indigo-200">
+          <h3 className="text-lg sm:text-xl font-bold text-indigo-900 mb-4">Technology Stack</h3>
+          <div className="flex flex-wrap gap-3">
+            <span className="px-4 py-2 bg-white text-indigo-900 rounded-full text-sm sm:text-base font-semibold shadow-sm">
+              React
             </span>
-            <span className="px-3 md:px-4 py-1.5 md:py-2 bg-gray-100 rounded-full text-xs md:text-sm text-gray-700 border border-gray-200 transition-all duration-300 hover:bg-gray-200 hover:scale-105">
-              MySQL
+            <span className="px-4 py-2 bg-white text-indigo-900 rounded-full text-sm sm:text-base font-semibold shadow-sm">
+              TypeScript
             </span>
-            <span className="px-3 md:px-4 py-1.5 md:py-2 bg-gray-100 rounded-full text-xs md:text-sm text-gray-700 border border-gray-200 transition-all duration-300 hover:bg-gray-200 hover:scale-105">
-              Rule-based Logic
+            <span className="px-4 py-2 bg-white text-indigo-900 rounded-full text-sm sm:text-base font-semibold shadow-sm">
+              Next.js
+            </span>
+            <span className="px-4 py-2 bg-white text-indigo-900 rounded-full text-sm sm:text-base font-semibold shadow-sm">
+              Tailwind CSS
+            </span>
+            <span className="px-4 py-2 bg-white text-indigo-900 rounded-full text-sm sm:text-base font-semibold shadow-sm">
+              Web-based Interface
             </span>
           </div>
         </div>

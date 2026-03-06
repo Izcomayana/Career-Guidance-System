@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Award, Brain, Target } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -20,19 +21,23 @@ export default function Hero() {
               Department of Computer Science, Hallmark University
             </p>
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4">
-              <Button
-                size="lg"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto"
-              >
-                Try Career Guidance
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="rounded-lg border-indigo-600 text-indigo-600 hover:text-indigo-600 hover:bg-indigo-50 bg-transparent transition-all duration-300 hover:scale-105 w-full sm:w-auto"
-              >
-                View Project Overview
-              </Button>
+              <Link to="/try" className="cursor-pointer">
+                <Button
+                  size="lg"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto"
+                >
+                  Try Career Guidance
+                </Button>
+              </Link>
+              <Link to="/about" className="cursor-pointer">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="rounded-lg border-indigo-600 text-indigo-600 hover:text-indigo-600 hover:bg-indigo-50 bg-transparent transition-all duration-300 hover:scale-105 w-full sm:w-auto"
+                >
+                  View Project Overview
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="flex justify-center animate-slide-up">
