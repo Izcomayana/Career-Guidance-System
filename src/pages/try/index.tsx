@@ -3,8 +3,6 @@
 import type React from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { Menu } from "lucide-react"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { careerRules, skills, subjects } from "./sys"
 import Footer from "@/components/footer"
@@ -16,7 +14,7 @@ import {
   CommandInput,
   CommandItem
 } from "@/components/ui/command"
-import { Check, ChevronsUpDown, Brain, Briefcase } from "lucide-react"
+import { Check, ChevronsUpDown, Brain, Briefcase, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   Select,
@@ -27,11 +25,12 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import Nav from "@/components/nav"
 
 interface FormData {
   gpa: string
   course: string
-  skill: string
+  skills: string[]
 }
 
 interface CareerMatch {
@@ -50,7 +49,7 @@ export default function TrySystemPage() {
   const [formData, setFormData] = useState<FormData>({
     gpa: "",
     course: "",
-    skill: ""
+    skills: []
   })
 
   const [result, setResult] = useState<CareerMatch[]>([])
@@ -58,10 +57,10 @@ export default function TrySystemPage() {
   const [openSkill, setOpenSkill] = useState(false)
 
   const isFormValid =
-    formData.gpa && formData.course && formData.skill
+    formData.gpa && formData.course && formData.skills.length > 0
 
   const matchCareers = (): CareerMatch[] => {
-    const { course, skill, gpa } = formData
+    const { course, skills, gpa } = formData
 
     return careerRules
       .map(rule => {
@@ -73,10 +72,12 @@ export default function TrySystemPage() {
           reasons.push(`${course} is highly relevant`)
         }
 
-        if (rule.skills.includes(skill)) {
-          score += 2
-          reasons.push(`${skill} is required for this career`)
-        }
+        skills.forEach(skill => {
+          if (rule.skills.includes(skill)) {
+            score += 2
+            reasons.push(`${skill} is useful for this career`)
+          }
+        })
 
         if (gpa === "4.5 – 5.0") score += 1
         else if (gpa === "3.5 – 4.4") score += 0.5
@@ -105,48 +106,16 @@ export default function TrySystemPage() {
   }
 
   const handleTryAgain = () => {
-    setFormData({ gpa: "", course: "", skill: "" })
+    setFormData({ gpa: "", course: "", skills: [] })
     setResult([])
     setView("form")
   }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-
-      {/* NAVBAR */}
-
-      <nav className="sticky top-0 z-50 h-16 border-b border-gray-200 backdrop-blur bg-white/90">
-        <div className="container mx-auto h-full px-4 flex items-center justify-between">
-          <div className="font-semibold text-indigo-900">
-            Career Guidance System
-          </div>
-
-          <div className="hidden md:flex gap-6">
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-            <Link to="/try">Try System</Link>
-          </div>
-
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-
-            <SheetContent side="right">
-              <div className="flex flex-col gap-6 mt-10">
-                <Link to="/">Home</Link>
-                <Link to="/about">About</Link>
-                <Link to="/try">Try System</Link>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </nav>
+      <Nav />
 
       {/* HEADER */}
-
       <section className="py-12 text-center">
         <h1 className="text-4xl font-bold text-indigo-900">
           Try Career Guidance System
@@ -253,7 +222,7 @@ export default function TrySystemPage() {
               {/* SKILL */}
               <div>
                 <label className="font-semibold text-gray-700">
-                  Primary Skill
+                  Skills (Select up to 2)
                 </label>
 
                 <Popover open={openSkill} onOpenChange={setOpenSkill}>
@@ -261,9 +230,39 @@ export default function TrySystemPage() {
                     <Button
                       variant="outline"
                       role="combobox"
-                      className="w-full justify-between"
+                      className="w-full justify-between min-h-[44px]"
                     >
-                      {formData.skill || "Select skill"}
+                      <div className="flex flex-wrap gap-2 items-center">
+
+                        {formData.skills.length === 0 && (
+                          <span className="text-muted-foreground">
+                            Select skills
+                          </span>
+                        )}
+
+                        {formData.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="flex items-center gap-1 bg-indigo-100 text-indigo-700 px-2 py-1 rounded-md text-sm"
+                          >
+                            {skill}
+
+                            <X
+                              className="w-3 h-3 cursor-pointer hover:text-red-500"
+                              onClick={(e) => {
+                                e.stopPropagation()
+
+                                setFormData({
+                                  ...formData,
+                                  skills: formData.skills.filter((s) => s !== skill)
+                                })
+                              }}
+                            />
+                          </span>
+                        ))}
+
+                      </div>
+
                       <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -274,26 +273,41 @@ export default function TrySystemPage() {
                       <CommandEmpty>No skill found.</CommandEmpty>
 
                       <CommandGroup className="max-h-64 overflow-y-auto">
-                        {skills.map((skill) => (
-                          <CommandItem
-                            key={skill}
-                            value={skill}
-                            onSelect={() => {
-                              setFormData({ ...formData, skill })
-                              setOpenSkill(false)
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                formData.skill === skill
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {skill}
-                          </CommandItem>
-                        ))}
+                        {skills.map((skill) => {
+                          const selected = formData.skills.includes(skill)
+
+                          return (
+                            <CommandItem
+                              key={skill}
+                              value={skill}
+                              onSelect={() => {
+
+                                let updated = [...formData.skills]
+
+                                if (selected) {
+                                  updated = updated.filter(s => s !== skill)
+                                } else {
+                                  if (updated.length >= 2) return
+                                  updated.push(skill)
+                                }
+
+                                setFormData({
+                                  ...formData,
+                                  skills: updated
+                                })
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  selected ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+
+                              {skill}
+                            </CommandItem>
+                          )
+                        })}
                       </CommandGroup>
                     </Command>
                   </PopoverContent>
@@ -313,7 +327,6 @@ export default function TrySystemPage() {
       )}
 
       {/* RESULTS */}
-
       {view === "result" && (
         <section className="px-4 pb-20">
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
@@ -375,7 +388,7 @@ export default function TrySystemPage() {
 
           </div>
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 ">
             <button
               onClick={handleTryAgain}
               className="px-8 py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
@@ -391,7 +404,6 @@ export default function TrySystemPage() {
           </div>
         </section>
       )}
-
       <Footer />
     </div>
   )
