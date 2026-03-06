@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
+import { careerRules, skills, subjects } from "./sys"
 
 interface FormData {
   gpa: string
@@ -35,60 +36,40 @@ export default function TrySystemPage() {
   const isFormValid = formData.gpa && formData.subject && formData.skill
 
   const generateRecommendation = (): Result => {
-    // Simple rule-based logic
-    const { gpa, subject, skill } = formData
 
-    let career = "Software Engineer"
+    const { subject, skill, gpa } = formData
+
+    let bestMatch = careerRules.find(rule =>
+      rule.subjects.includes(subject) && rule.skills.includes(skill)
+    )
+
+    if (!bestMatch) {
+      bestMatch = careerRules.find(rule =>
+        rule.skills.includes(skill)
+      )
+    }
+
+    if (!bestMatch) {
+      bestMatch = careerRules[Math.floor(Math.random() * careerRules.length)]
+    }
+
     let confidence: "High" | "Medium" | "Low" = "Medium"
-    const reasons: string[] = []
-    let alternatives: string[] = []
 
-    // Career determination logic
-    if (skill === "Programming") {
-      if (subject === "Computer Science" || subject === "Mathematics") {
-        career = "Software Engineer"
-        confidence = gpa === "3.5 – 4.4" || gpa === "4.5 – 5.0" ? "High" : "Medium"
-        alternatives = ["Data Engineer", "Systems Analyst", "DevOps Engineer"]
-      } else {
-        career = "Web Developer"
-        confidence = "Medium"
-        alternatives = ["Software Engineer", "Mobile Developer", "UI Developer"]
-      }
-    } else if (skill === "Data Analysis") {
-      career = "Data Analyst"
-      confidence = subject === "Mathematics" || subject === "Computer Science" ? "High" : "Medium"
-      alternatives = ["Business Analyst", "Data Scientist", "Research Analyst"]
-    } else if (skill === "Problem Solving") {
-      career = "Systems Analyst"
-      confidence = "Medium"
-      alternatives = ["Business Consultant", "Operations Analyst", "Project Manager"]
-    } else if (skill === "Design / Creativity") {
-      career = "UX/UI Designer"
-      confidence = subject === "Arts / Social Sciences" ? "High" : "Medium"
-      alternatives = ["Product Designer", "Graphic Designer", "Creative Director"]
-    } else if (skill === "Communication") {
-      career = "Technical Writer"
-      confidence = "Medium"
-      alternatives = ["Product Manager", "Business Analyst", "Content Strategist"]
+    if (gpa === "4.5 – 5.0") confidence = "High"
+    if (gpa === "1.0 – 2.4") confidence = "Low"
+
+    const reasons = [
+      `Your strongest subject (${subject}) aligns with this field`,
+      `Your skill interest (${skill}) matches the career requirements`,
+      `Your academic performance (${gpa}) supports this path`
+    ]
+
+    return {
+      career: bestMatch.career,
+      confidence,
+      reasons,
+      alternatives: bestMatch.alternatives
     }
-
-    // Generate reasons
-    if (gpa === "4.5 – 5.0" || gpa === "3.5 – 4.4") {
-      reasons.push("Strong academic performance indicates high learning capability")
-    } else if (gpa === "2.5 – 3.4") {
-      reasons.push("Solid academic foundation with room for practical skill development")
-    } else {
-      reasons.push("Emphasis on practical skills and hands-on experience")
-    }
-
-    reasons.push(`High interest in ${skill.toLowerCase()} aligns with career requirements`)
-    reasons.push(`Background in ${subject.toLowerCase()} provides relevant knowledge base`)
-
-    if (confidence === "High") {
-      reasons.push("Excellent match between your profile and career requirements")
-    }
-
-    return { career, confidence, reasons, alternatives }
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -186,16 +167,18 @@ export default function TrySystemPage() {
                     Strongest Subject Area
                   </label>
                   <select
-                    id="subject"
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white text-gray-900"
                   >
-                    <option value="">Select your strongest subject</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Sciences">Sciences</option>
-                    <option value="Arts / Social Sciences">Arts / Social Sciences</option>
+                    <option value="">Select subject</option>
+
+                    {subjects.map(subject => (
+                      <option key={subject} value={subject}>
+                        {subject}
+                      </option>
+                    ))}
+
                   </select>
                 </div>
 
@@ -211,11 +194,11 @@ export default function TrySystemPage() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white text-gray-900"
                   >
                     <option value="">Select your primary skill interest</option>
-                    <option value="Programming">Programming</option>
-                    <option value="Data Analysis">Data Analysis</option>
-                    <option value="Problem Solving">Problem Solving</option>
-                    <option value="Design / Creativity">Design / Creativity</option>
-                    <option value="Communication">Communication</option>
+                    {skills.map(skill => (
+                      <option key={skill} value={skill}>
+                        {skill}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -241,13 +224,12 @@ export default function TrySystemPage() {
             <div className="bg-gradient-to-br from-indigo-50 to-teal-50 rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 text-center transition-all duration-300 hover:shadow-xl">
               <div className="mb-4">
                 <span
-                  className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
-                    result.confidence === "High"
-                      ? "bg-green-100 text-green-800"
-                      : result.confidence === "Medium"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-orange-100 text-orange-800"
-                  }`}
+                  className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${result.confidence === "High"
+                    ? "bg-green-100 text-green-800"
+                    : result.confidence === "Medium"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-orange-100 text-orange-800"
+                    }`}
                 >
                   {result.confidence} Confidence
                 </span>
