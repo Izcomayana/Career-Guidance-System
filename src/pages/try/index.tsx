@@ -17,11 +17,13 @@ interface FormData {
   skill: string
 }
 
-interface Result {
+interface CareerMatch {
   career: string
-  confidence: "High" | "Medium" | "Low"
-  reasons: string[]
+  subjects: string[]
+  skills: string[]
   alternatives: string[]
+  match: number
+  reasons: string[]
 }
 
 export default function TrySystemPage() {
@@ -31,57 +33,58 @@ export default function TrySystemPage() {
     subject: "",
     skill: "",
   })
-  const [result, setResult] = useState<Result | null>(null)
+  const [result, setResult] = useState<CareerMatch[]>([])
 
   const isFormValid = formData.gpa && formData.subject && formData.skill
 
-  const generateRecommendation = (): Result => {
+  const matchCareers = (): CareerMatch[] => {
 
     const { subject, skill, gpa } = formData
 
-    let bestMatch = careerRules.find(rule =>
-      rule.subjects.includes(subject) && rule.skills.includes(skill)
-    )
+    return careerRules
+      .map(rule => {
 
-    if (!bestMatch) {
-      bestMatch = careerRules.find(rule =>
-        rule.skills.includes(skill)
-      )
-    }
+        let score = 0
+        const reasons: string[] = []
 
-    if (!bestMatch) {
-      bestMatch = careerRules[Math.floor(Math.random() * careerRules.length)]
-    }
+        if (rule.subjects.includes(subject)) {
+          score += 2
+          reasons.push(`Your subject (${subject}) aligns with this career`)
+        }
 
-    let confidence: "High" | "Medium" | "Low" = "Medium"
+        if (rule.skills.includes(skill)) {
+          score += 2
+          reasons.push(`Your skill (${skill}) is important for this role`)
+        }
 
-    if (gpa === "4.5 – 5.0") confidence = "High"
-    if (gpa === "1.0 – 2.4") confidence = "Low"
+        if (gpa === "4.5 – 5.0") {
+          score += 1
+          reasons.push("Your strong GPA supports this career path")
+        }
 
-    const reasons = [
-      `Your strongest subject (${subject}) aligns with this field`,
-      `Your skill interest (${skill}) matches the career requirements`,
-      `Your academic performance (${gpa}) supports this path`
-    ]
+        const match = Math.round((score / 5) * 100)
 
-    return {
-      career: bestMatch.career,
-      confidence,
-      reasons,
-      alternatives: bestMatch.alternatives
-    }
+        return {
+          ...rule,
+          match,
+          reasons
+        }
+
+      })
+      .sort((a, b) => b.match - a.match)
+      .slice(0, 3)
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const recommendation = generateRecommendation()
+    const recommendation = matchCareers()
     setResult(recommendation)
     setView("result")
   }
 
   const handleTryAgain = () => {
     setFormData({ gpa: "", subject: "", skill: "" })
-    setResult(null)
+    setResult([])
     setView("form")
   }
 
@@ -217,66 +220,47 @@ export default function TrySystemPage() {
       )}
 
       {/* Result State */}
-      {view === "result" && result && (
-        <section className="px-4 pb-16 sm:pb-20 animate-slide-up">
+      {view === "result" && result.length > 0 && (
+
+        <section className="px-4 pb-16 sm:pb-20">
+
           <div className="max-w-5xl mx-auto space-y-8">
-            {/* Main Result Card */}
-            <div className="bg-gradient-to-br from-indigo-50 to-teal-50 rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 text-center transition-all duration-300 hover:shadow-xl">
-              <div className="mb-4">
-                <span
-                  className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${result.confidence === "High"
-                    ? "bg-green-100 text-green-800"
-                    : result.confidence === "Medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-orange-100 text-orange-800"
-                    }`}
-                >
-                  {result.confidence} Confidence
-                </span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-indigo-900 mb-2">Recommended Career</h2>
-              <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-teal-600 mb-6">{result.career}</p>
-            </div>
 
-            {/* Why This Career Fits You */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 transition-all duration-300 hover:shadow-xl">
-              <h3 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-6">Why This Career Fits You</h3>
-              <ul className="space-y-4">
-                {result.reasons.map((reason, index) => (
-                  <li
-                    key={index}
-                    className="flex items-start gap-3 animate-fade-in"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <svg
-                      className="w-6 h-6 text-teal-500 flex-shrink-0 mt-0.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-700 text-sm sm:text-base">{reason}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {result.map((career, index) => (
 
-            {/* Alternative Career Options */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 transition-all duration-300 hover:shadow-xl">
-              <h3 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-6">Alternative Career Options</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {result.alternatives.map((alt, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-50 rounded-lg p-4 text-center border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-300 transform hover:scale-105 animate-fade-in"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <p className="font-semibold text-gray-800">{alt}</p>
-                  </div>
-                ))}
+              <div key={index} className="bg-white rounded-2xl shadow-lg p-8">
+
+                <h2 className="text-2xl font-bold text-indigo-900 mb-2">
+                  {index + 1}️⃣ {career.career}
+                </h2>
+
+                <p className="text-teal-600 font-semibold mb-4">
+                  {career.match}% Match
+                </p>
+
+                <h4 className="font-semibold mb-2">Why this fits you:</h4>
+
+                <ul className="mb-4 list-disc list-inside">
+
+                  {career.reasons.map((reason, i) => (
+                    <li key={i}>{reason}</li>
+                  ))}
+
+                </ul>
+
+                <h4 className="font-semibold mb-2">Alternative Careers:</h4>
+
+                <ul className="list-disc list-inside">
+
+                  {career.alternatives.map((alt, i) => (
+                    <li key={i}>{alt}</li>
+                  ))}
+
+                </ul>
+
               </div>
-            </div>
+
+            ))}
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -293,8 +277,10 @@ export default function TrySystemPage() {
                 Back to Home
               </Link>
             </div>
+
           </div>
         </section>
+
       )}
 
       {/* Footer */}
