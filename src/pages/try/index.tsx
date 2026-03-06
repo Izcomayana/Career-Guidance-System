@@ -8,10 +8,22 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { careerRules, skills, subjects } from "./sys"
 import Footer from "@/components/footer"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem
+} from "@/components/ui/command"
+import { Check, ChevronsUpDown, Brain, Briefcase } from "lucide-react"
+import { cn } from "@/lib/utils"
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
@@ -42,6 +54,8 @@ export default function TrySystemPage() {
   })
 
   const [result, setResult] = useState<CareerMatch[]>([])
+  const [openCourse, setOpenCourse] = useState(false)
+  const [openSkill, setOpenSkill] = useState(false)
 
   const isFormValid =
     formData.gpa && formData.course && formData.skill
@@ -159,25 +173,31 @@ export default function TrySystemPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
 
               {/* GPA */}
-
               <div>
                 <label className="font-semibold text-gray-700">
                   GPA Range
                 </label>
 
-                <select
+                <Select
                   value={formData.gpa}
-                  onChange={(e) =>
-                    setFormData({ ...formData, gpa: e.target.value })
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, gpa: value })
                   }
-                  className="w-full border rounded-lg px-4 py-3"
                 >
-                  <option value="">Select GPA</option>
-                  <option value="1.0 – 2.4">1.0 – 2.4</option>
-                  <option value="2.5 – 3.4">2.5 – 3.4</option>
-                  <option value="3.5 – 4.4">3.5 – 4.4</option>
-                  <option value="4.5 – 5.0">4.5 – 5.0</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select GPA" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Select GPA</SelectLabel>
+                      <SelectItem value="1.0 – 2.4">1.0 – 2.4</SelectItem>
+                      <SelectItem value="2.5 – 3.4">2.5 – 3.4</SelectItem>
+                      <SelectItem value="3.5 – 4.4">3.5 – 4.4</SelectItem>
+                      <SelectItem value="4.5 – 5.0">4.5 – 5.0</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* COURSE */}
@@ -186,24 +206,48 @@ export default function TrySystemPage() {
                   Course
                 </label>
 
-                <Select
-                  value={formData.course}
-                  onValueChange={(value: any) =>
-                    setFormData({ ...formData, course: value })
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select course" />
-                  </SelectTrigger>
+                <Popover open={openCourse} onOpenChange={setOpenCourse}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className="w-full justify-between"
+                    >
+                      {formData.course || "Select course"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
 
-                  <SelectContent>
-                    {subjects.map((course) => (
-                      <SelectItem key={course} value={course}>
-                        {course}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search course..." />
+                      <CommandEmpty>No course found.</CommandEmpty>
+
+                      <CommandGroup className="max-h-64 overflow-y-auto">
+                        {subjects.map((course) => (
+                          <CommandItem
+                            key={course}
+                            value={course}
+                            onSelect={() => {
+                              setFormData({ ...formData, course })
+                              setOpenCourse(false)
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                formData.course === course
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {course}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               {/* SKILL */}
@@ -212,24 +256,48 @@ export default function TrySystemPage() {
                   Primary Skill
                 </label>
 
-                <Select
-                  value={formData.skill}
-                  onValueChange={(value: any) =>
-                    setFormData({ ...formData, skill: value })
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select skill" />
-                  </SelectTrigger>
+                <Popover open={openSkill} onOpenChange={setOpenSkill}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className="w-full justify-between"
+                    >
+                      {formData.skill || "Select skill"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
 
-                  <SelectContent>
-                    {skills.map((skill) => (
-                      <SelectItem key={skill} value={skill}>
-                        {skill}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search skill..." />
+                      <CommandEmpty>No skill found.</CommandEmpty>
+
+                      <CommandGroup className="max-h-64 overflow-y-auto">
+                        {skills.map((skill) => (
+                          <CommandItem
+                            key={skill}
+                            value={skill}
+                            onSelect={() => {
+                              setFormData({ ...formData, skill })
+                              setOpenSkill(false)
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                formData.skill === skill
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {skill}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               <button
@@ -252,30 +320,56 @@ export default function TrySystemPage() {
             {result.map((career, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-xl shadow"
+                className="bg-white p-8 rounded-xl shadow hover:shadow-lg transition"
               >
-                <div className="flex justify-between mb-4">
-                  <h2 className="font-bold text-indigo-900">
-                    #{index + 1} {career.career}
-                  </h2>
+                <div className="flex items-center justify-between mb-4">
 
-                  <span className="text-indigo-600 font-semibold">
+                  <div className="flex items-center gap-3">
+                    <Briefcase className="text-indigo-600 w-6 h-6" />
+
+                    <h2 className="font-bold text-indigo-900 text-lg">
+                      #{index + 1} {career.career}
+                    </h2>
+                  </div>
+
+                  <span className="text-indigo-600 font-semibold text-lg">
                     {career.match}%
                   </span>
                 </div>
 
-                <div className="w-full bg-gray-200 h-3 rounded-full mb-4">
+                <div className="w-full bg-gray-200 h-3 rounded-full mb-5">
                   <div
-                    className="bg-indigo-600 h-3 rounded-full"
+                    className="bg-indigo-600 h-3 rounded-full transition-all"
                     style={{ width: `${career.match}%` }}
-                  ></div>
+                  />
                 </div>
 
-                <ul className="text-gray-600 space-y-1">
-                  {career.reasons.map((reason, i) => (
-                    <li key={i}>• {reason}</li>
-                  ))}
-                </ul>
+                {/* reasons */}
+                <div className="mb-4">
+                  <h3 className="font-semibold text-gray-800 flex items-center gap-2 mb-2">
+                    <Brain className="w-4 h-4 text-indigo-600" />
+                    Why this matches you
+                  </h3>
+
+                  <ul className="text-gray-600 space-y-1">
+                    {career.reasons.map((reason, i) => (
+                      <li key={i}>• {reason}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* alternatives */}
+                {career.alternatives?.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-1">
+                      Related Careers
+                    </h3>
+
+                    <p className="text-gray-500 text-sm">
+                      {career.alternatives.join(", ")}
+                    </p>
+                  </div>
+                )}
               </div>
             ))}
 
